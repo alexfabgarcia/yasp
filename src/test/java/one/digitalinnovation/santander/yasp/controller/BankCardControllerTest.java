@@ -1,7 +1,8 @@
 package one.digitalinnovation.santander.yasp.controller;
 
 import one.digitalinnovation.santander.yasp.common.entity.BankCard;
-import one.digitalinnovation.santander.yasp.common.entity.BankCardTypeEnum;
+import one.digitalinnovation.santander.yasp.common.entity.CreditCard;
+import one.digitalinnovation.santander.yasp.common.entity.DebitCard;
 import one.digitalinnovation.santander.yasp.repository.BankCardRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -41,7 +42,7 @@ public class BankCardControllerTest {
     @DisplayName("Should return no taxes when it's a valid debit card")
     void shouldReturnNoTaxesWhenIsValidDebitCard() throws Exception {
         // Given
-        final BankCard card = BankCard.builder().withId(1L).withType(BankCardTypeEnum.DEBIT).build();
+        final BankCard card = DebitCard.builder().withId(1L).build();
         BankCardRepository.get().create(card);
 
         // When
@@ -58,10 +59,9 @@ public class BankCardControllerTest {
     void shouldReturnNoTaxesWhenIsValidCreditCard() throws Exception {
         // Given
         final double monthlyTax = 10D;
-        final BankCard card = BankCard.builder()
+        final BankCard card = CreditCard.builder()
                 .withId(1L)
                 .withMonthlyTax(monthlyTax)
-                .withType(BankCardTypeEnum.CREDIT)
                 .build();
         BankCardRepository.get().create(card);
 
@@ -78,11 +78,10 @@ public class BankCardControllerTest {
     @DisplayName("Should return no taxes when it's a valid credit card of a customer with good relationship")
     void shouldReturnNoTaxesWhenIsValidCreditCardFromCustomerWithGoodRelationship() throws Exception {
         // Given
-        final BankCard card = BankCard.builder()
+        final BankCard card = CreditCard.builder()
                 .withId(1L)
                 .withTaxFreeForRelationShip(true)
                 .withMonthlyTax(10D)
-                .withType(BankCardTypeEnum.CREDIT)
                 .build();
         BankCardRepository.get().create(card);
 
@@ -99,10 +98,9 @@ public class BankCardControllerTest {
     @DisplayName("Should return no taxes when it's a valid credit card and the customer has used it this month.")
     void shouldReturnNoTaxesWhenIsValidCreditCardAndCustomerHasUsedItThisMonth() throws Exception {
         // Given
-        final BankCard card = BankCard.builder()
+        final BankCard card = CreditCard.builder()
                 .withId(1L)
                 .withMonthlyTax(10D)
-                .withType(BankCardTypeEnum.CREDIT)
                 .build();
         BankCardRepository.get().create(card);
         BankCardRepository.get().addEntry(card.getId(), LocalDateTime.now(), 100D);
