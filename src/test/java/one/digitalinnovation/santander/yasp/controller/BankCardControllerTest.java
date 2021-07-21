@@ -10,6 +10,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 
@@ -20,15 +21,19 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+@ComponentScan("one.digitalinnovation.santander.yasp.common.config")
 @WebMvcTest(BankCardController.class)
 public class BankCardControllerTest {
 
     @Autowired
     MockMvc mockMvc;
 
+    @Autowired
+    BankCardRepository bankCardRepository;
+
     @BeforeEach
     void setup() {
-        BankCardRepository.get().clear();
+        bankCardRepository.clear();
     }
 
     @Test
@@ -44,7 +49,7 @@ public class BankCardControllerTest {
     void shouldReceiveBadRequestWhenBankCardIsNotTaxable() throws Exception {
         // Given
         final BankCard card = MealCard.builder().withId(1L).build();
-        BankCardRepository.get().create(card);
+        bankCardRepository.create(card);
 
         mockMvc.perform(get("/cards/{id}/tax", 1L))
                 .andDo(print())
@@ -56,7 +61,7 @@ public class BankCardControllerTest {
     void shouldReturnNoTaxesWhenIsValidDebitCard() throws Exception {
         // Given
         final BankCard card = DebitCard.builder().withId(1L).build();
-        BankCardRepository.get().create(card);
+        bankCardRepository.create(card);
 
         // When
         final ResultActions resultActions = mockMvc.perform(get("/cards/{id}/tax", 1L));
@@ -76,7 +81,7 @@ public class BankCardControllerTest {
                 .withId(1L)
                 .withMonthlyTax(monthlyTax)
                 .build();
-        BankCardRepository.get().create(card);
+        bankCardRepository.create(card);
 
         // When
         final ResultActions resultActions = mockMvc.perform(get("/cards/{id}/tax", 1L));
@@ -96,7 +101,7 @@ public class BankCardControllerTest {
                 .withTaxFreeForRelationShip(true)
                 .withMonthlyTax(10D)
                 .build();
-        BankCardRepository.get().create(card);
+        bankCardRepository.create(card);
 
         // When
         final ResultActions resultActions = mockMvc.perform(get("/cards/{id}/tax", 1L));
@@ -115,8 +120,8 @@ public class BankCardControllerTest {
                 .withId(1L)
                 .withMonthlyTax(10D)
                 .build();
-        BankCardRepository.get().create(card);
-        BankCardRepository.get().addEntry(card.getId(), LocalDateTime.now(), 100D);
+        bankCardRepository.create(card);
+        bankCardRepository.addEntry(card.getId(), LocalDateTime.now(), 100D);
 
         // When
         final ResultActions resultActions = mockMvc.perform(get("/cards/{id}/tax", 1L));

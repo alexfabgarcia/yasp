@@ -12,9 +12,14 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/cards")
 public class BankCardController {
 
+    private final BankCardService bankCardService;
+
+    public BankCardController(final BankCardService bankCardService) {
+        this.bankCardService = bankCardService;
+    }
+
     @GetMapping("/{id}/tax")
     ResponseEntity<BankCardTaxDTO> getCardTax(@PathVariable("id") final Long id) {
-        final BankCardService bankCardService = new BankCardService();
         final Double tax = bankCardService.getCardTax(id);
         return ResponseEntity.ok(new BankCardTaxDTO(id, tax));
     }
