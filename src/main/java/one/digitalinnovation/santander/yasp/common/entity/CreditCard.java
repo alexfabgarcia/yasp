@@ -7,7 +7,7 @@ import java.time.LocalDateTime;
 import java.time.Month;
 
 @Slf4j
-public class CreditCard extends BankCard {
+public class CreditCard extends BankCard implements TaxableCard {
 
 
     @Builder(setterPrefix = "with")

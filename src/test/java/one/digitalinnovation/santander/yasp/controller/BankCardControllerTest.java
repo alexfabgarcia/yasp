@@ -3,6 +3,7 @@ package one.digitalinnovation.santander.yasp.controller;
 import one.digitalinnovation.santander.yasp.common.entity.BankCard;
 import one.digitalinnovation.santander.yasp.common.entity.CreditCard;
 import one.digitalinnovation.santander.yasp.common.entity.DebitCard;
+import one.digitalinnovation.santander.yasp.common.entity.MealCard;
 import one.digitalinnovation.santander.yasp.repository.BankCardRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -34,6 +35,18 @@ public class BankCardControllerTest {
     @DisplayName("Should receive not found when card does not exist")
     void shouldReceiveBadRequestWhenBankCardDoesNotExist() throws Exception {
         mockMvc.perform(get("/cards/{id}/tax", 1000L))
+                .andDo(print())
+                .andExpect(status().isNotFound());
+    }
+
+    @Test
+    @DisplayName("Should receive not found when card is not taxable")
+    void shouldReceiveBadRequestWhenBankCardIsNotTaxable() throws Exception {
+        // Given
+        final BankCard card = MealCard.builder().withId(1L).build();
+        BankCardRepository.get().create(card);
+
+        mockMvc.perform(get("/cards/{id}/tax", 1L))
                 .andDo(print())
                 .andExpect(status().isNotFound());
     }

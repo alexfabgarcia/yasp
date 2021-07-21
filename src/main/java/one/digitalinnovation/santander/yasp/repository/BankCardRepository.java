@@ -1,10 +1,12 @@
 package one.digitalinnovation.santander.yasp.repository;
 
 import one.digitalinnovation.santander.yasp.common.entity.BankCard;
+import one.digitalinnovation.santander.yasp.common.entity.TaxableCard;
 
 import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Optional;
 
 public class BankCardRepository {
@@ -33,5 +35,15 @@ public class BankCardRepository {
 
     public void addEntry(final Long id, final LocalDateTime date, final double value) {
         Optional.ofNullable(CARD_MAP.get(id)).ifPresent(card -> card.addEntry(date, value));
+    }
+
+    public Optional<TaxableCard> getTaxableCardById(final Long id) {
+        return getBankCardById(id)
+                .map(card -> {
+                    if (card instanceof TaxableCard) {
+                        return ((TaxableCard) card);
+                    }
+                    return null;
+                });
     }
 }

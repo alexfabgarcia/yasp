@@ -25,6 +25,4 @@ public abstract class BankCard {
         entries.add(BankCardEntry.builder().withDateTime(dateTime).withValue(value).build());
     }
 
-    public abstract Double getCalculatedTax();
-
 }
