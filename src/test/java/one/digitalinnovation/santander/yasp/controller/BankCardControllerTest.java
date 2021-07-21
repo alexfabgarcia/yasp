@@ -57,9 +57,10 @@ public class BankCardControllerTest {
     @DisplayName("Should return taxes when it's a valid credit card")
     void shouldReturnNoTaxesWhenIsValidCreditCard() throws Exception {
         // Given
+        final double monthlyTax = 10D;
         final BankCard card = BankCard.builder()
                 .withId(1L)
-                .withMonthlyTax(10D)
+                .withMonthlyTax(monthlyTax)
                 .withType(BankCardTypeEnum.CREDIT)
                 .build();
         BankCardRepository.get().create(card);
@@ -70,7 +71,7 @@ public class BankCardControllerTest {
         // Then
         resultActions.andExpect(status().isOk())
                 .andExpect(jsonPath("id").value(1L))
-                .andExpect(jsonPath("tax").value(card.getMonthlyTax()));
+                .andExpect(jsonPath("tax").value(monthlyTax));
     }
 
     @Test
