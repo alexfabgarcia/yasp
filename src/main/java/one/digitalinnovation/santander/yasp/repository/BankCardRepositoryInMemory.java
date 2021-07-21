@@ -2,12 +2,14 @@ package one.digitalinnovation.santander.yasp.repository;
 
 import one.digitalinnovation.santander.yasp.common.entity.BankCard;
 import one.digitalinnovation.santander.yasp.common.entity.TaxableCard;
+import org.springframework.stereotype.Repository;
 
 import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 
+@Repository
 public class BankCardRepositoryInMemory implements BankCardRepository {
 
     private static final Map<Long, BankCard> CARD_MAP = new HashMap<>();
