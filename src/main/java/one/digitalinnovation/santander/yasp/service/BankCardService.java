@@ -6,6 +6,9 @@ import one.digitalinnovation.santander.yasp.common.exception.CardNotFoundExcepti
 import one.digitalinnovation.santander.yasp.common.exception.InvalidCardException;
 import one.digitalinnovation.santander.yasp.repository.BankCardRepository;
 
+import java.time.LocalDateTime;
+import java.time.Month;
+
 public class BankCardService {
     public Double getCardTax(final Long id) {
         final BankCardRepository bankCardRepository = BankCardRepository.get();
@@ -22,7 +25,8 @@ public class BankCardService {
                 System.out.println("Cartão de crédito, taxa zerada por bom relacionamento.");
                 return 0D;
             }
-            if (bankCard.hasEntryThisMonth()) {
+            final Month month = LocalDateTime.now().getMonth();
+            if (bankCard.getEntries().stream().anyMatch(entry -> entry.getDateTime().getMonth().equals(month))) {
                 System.out.println("Cartão de crédito, taxa zerada por haver lançamento este mês.");
                 return 0D;
             }

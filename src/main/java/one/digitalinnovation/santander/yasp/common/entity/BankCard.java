@@ -4,7 +4,6 @@ import lombok.Builder;
 import lombok.Getter;
 
 import java.time.LocalDateTime;
-import java.time.Month;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -23,10 +22,5 @@ public class BankCard {
 
     public void addEntry(final LocalDateTime dateTime, final double value) {
         entries.add(BankCardEntry.builder().withDateTime(dateTime).withValue(value).build());
-    }
-
-    public boolean hasEntryThisMonth() {
-        final Month month = LocalDateTime.now().getMonth();
-        return entries.stream().anyMatch(entry -> entry.getDateTime().getMonth().equals(month));
     }
 }
